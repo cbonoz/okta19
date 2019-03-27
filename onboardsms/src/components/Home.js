@@ -75,6 +75,8 @@ export default withAuth(class Home extends Component {
                     </span>
                     <div className='centered'>
                         <Link to="/guides"><Button className="login-button btn-success">Discover Guides</Button></Link>
+                        <br/>
+                        <p className='white login-text'><i>Login to create new Guides</i></p>
                     </div>
                 </div>
                 <NotificationSystem ref={this.notificationSystem} />

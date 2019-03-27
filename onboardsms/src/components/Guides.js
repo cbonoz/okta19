@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { withAuth } from '@okta/okta-react'
+import Header from './Header';
 
 class Guides extends Component {
     constructor(props) {
         super(props);
-        this.state = { authenticated: null };
+        this.state = { authenticated: null, guides: [] };
         this.checkAuthentication = this.checkAuthentication.bind(this);
       }
     
@@ -13,9 +14,7 @@ class Guides extends Component {
         if (authenticated !== this.state.authenticated) {
           this.setState({ authenticated });
         }
-        if (!authenticated) {
-            window.location.pathname = "/"
-        }
+        
       }
    
       async componentDidMount() {
@@ -30,6 +29,7 @@ class Guides extends Component {
         const { authenticated } = this.state
         return (
             <div>
+                <Header/>
                 {authenticated && <h1>authenticated</h1>}                
             </div>
         );

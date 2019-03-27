@@ -19,21 +19,25 @@ class Header extends Component {
             />
           </Navbar.Brand>
           <Navbar.Toggle />
-          {authenticated ? <div>
-            <Navbar.Collapse className="justify-content-end">
-               <Nav.Link href="#" onClick={login}>Login</Nav.Link>
-              <Nav.Link href="/create" onClick={logout}>Logout</Nav.Link>
 
-              <Navbar.Text pullRight>
-                Signed in as: <a href="#login">Mark Otto</a>
-              </Navbar.Text>
-            </Navbar.Collapse>
-          </div> :
-            <div pullRight>
+          <Nav.Link href="/guides">Guides</Nav.Link>
+          {login && <div>
+            {authenticated ? <div>
               <Navbar.Collapse className="justify-content-end">
                 <Nav.Link href="#" onClick={login}>Login</Nav.Link>
+                <Nav.Link href="/create" onClick={logout}>Logout</Nav.Link>
+
+                <Navbar.Text pullRight>
+                  Signed in as: <a href="#login">Mark Otto</a>
+                </Navbar.Text>
               </Navbar.Collapse>
-            </div>}
+            </div> :
+              <div pullRight>
+                <Navbar.Collapse className="justify-content-end">
+                  <Nav.Link href="#" onClick={login}>Login</Nav.Link>
+                </Navbar.Collapse>
+              </div>}
+          </div>}
         </Navbar>
       </div>
     )

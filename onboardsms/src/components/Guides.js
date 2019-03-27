@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withAuth } from '@okta/okta-react'
 
-class Protected extends Component {
+class Guides extends Component {
     constructor(props) {
         super(props);
         this.state = { authenticated: null };
@@ -30,10 +30,10 @@ class Protected extends Component {
         const { authenticated } = this.state
         return (
             <div>
-                
+                {authenticated && <h1>authenticated</h1>}                
             </div>
         );
     }
 }
 
-export default withAuth(Protected);
+export default withAuth(Guides);

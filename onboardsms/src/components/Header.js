@@ -1,45 +1,43 @@
+
 import React, { Component } from 'react';
+import { Navbar, Nav } from 'react-bootstrap'
+import logo from '../assets/onboard_simple.png'
 
 class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { authenticated: null };
-        this.checkAuthentication = this.checkAuthentication.bind(this);
-        this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
-    }
+  render() {
+    const { authenticated, login, logout } = this.props
+    return (
+      <div>
+        <Navbar bg="light" variant="light" sticky="top">
+          <Navbar.Brand href="/" >
+            <img
+              alt="Onboard SMS"
+              src={logo}
+              width="120"
+              height="30"
+              className="d-inline-block align-top"
+            />
+          </Navbar.Brand>
+          <Navbar.Toggle />
+          {authenticated ? <div>
+            <Navbar.Collapse className="justify-content-end">
+               <Nav.Link href="#" onClick={login}>Login</Nav.Link>
+              <Nav.Link href="/create" onClick={logout}>Logout</Nav.Link>
 
-    async checkAuthentication() {
-        const authenticated = await this.props.auth.isAuthenticated();
-        if (authenticated !== this.state.authenticated) {
-            this.setState({ authenticated });
-        }
-    }
-
-    async componentDidMount() {
-        this.checkAuthentication();
-    }
-
-    async componentDidUpdate() {
-        this.checkAuthentication();
-    }
-
-
-    async login() {
-        this.props.auth.login('/');
-    }
-
-    async logout() {
-        this.props.auth.logout('/');
-    }
-
-    render() {
-        return (
-            <div>
-
-            </div>
-        );
-    }
+              <Navbar.Text pullRight>
+                Signed in as: <a href="#login">Mark Otto</a>
+              </Navbar.Text>
+            </Navbar.Collapse>
+          </div> :
+            <div pullRight>
+              <Navbar.Collapse className="justify-content-end">
+                <Nav.Link href="#" onClick={login}>Login</Nav.Link>
+              </Navbar.Collapse>
+            </div>}
+        </Navbar>
+      </div>
+    )
+  }
 }
 
-export default withAuth(Header);
+export default Header

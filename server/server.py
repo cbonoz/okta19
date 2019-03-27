@@ -1,9 +1,9 @@
-from flask import Flask, request, session
+from flask import Flask, request, session, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from tinydb import TinyDB, Query
 from tinydb.storages import JSONStorage
 from tinydb.middlewares import CachingMiddleware
-from datetime import datetime
+import time
 
 # Secret key for session object
 SECRET_KEY = 'd64da3ef-bd48-4b29-b759-6f142c6274f4'
@@ -30,36 +30,36 @@ Guide Schema:
 def search_by_name(guide_name):
     return db.search(Guide.name == guide_name)
 
-def search_by_auth(guide_author)
+def search_by_author(guide_author):
     return db.search(Guide.author == guide_author)
 
 def get_all():
-    return db.search()
+    return db.all()
 
-def insert(author, guide_name, steps):
-    if not guide_name:
+def insert(guide):
+    if 'name' not in guide:
         raise Exception('guide name must be specified')
     
-    if not steps:
+    if 'steps' not in guide:
         raise Exception('guide must have at least one step')
 
-    if not author:
+    if 'author' not in guide:
         raise Exception('guide must have an author')
 
     if search_by_name(guide['name']):
         raise Exception('guide name already exists')
 
-    db.insert({
-        'author': author,
-        'name': guide_name,
-        'steps': steps,
-        'createdAt': datetime.timestamp()
-    })
-    return True
+    created_guide = {
+        'author': guide['author'],
+        'name': guide['name'],
+        'steps': guide['steps'],
+        'createdAt': time.time()
+    }
+    db.insert(created_guide)
+    return created_guide
 
 def remove(guide_name):
     db.remove(Guide.name == guide_name)
-
 
 def not_found_message(guide_name):
     return "Could not find a guide with name %s" % guide_name
@@ -73,15 +73,23 @@ def completed_message(guide_name):
 #### Guide routes
 
 @app.route("/guides", methods=['POST'])
-def post_guide
+def post_guide():
+    body = request.get_json()
+    print(body)
+    return jsonify(insert(body))
 
 @app.route("/guides", methods=['GET'])
-def get_guides
+def get_guides():
+    return jsonify(get_all())
 
+@app.route("/guides/<guide_author>", methods=['GET'])
+def get_guides_by_author(guide_author):
+    return jsonify(search_by_author(guide_author))
 
-@app.route("/guides", methods=['DELETE'])
-def delete_guide
-
+@app.route("/guides/<guide_name>", methods=['DELETE'])
+def delete_guide(guide_name):
+    remove(guide_name)
+    return True
 
 #### TWilio Callback
 

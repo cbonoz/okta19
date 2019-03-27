@@ -1,9 +1,10 @@
 # Onboard SMS
 SMS Onboarding Guides in under 160 characters.
 
-Simply create a new entr
+Onboard SMS enables guides and tutorials delivered to you where-ever you are in the world,
+regardless if you have WIFI connection or not.
 
-1. Create a new guide.
+1. Create a new guide
    1. Ex: CPR
    2. List of steps
 
@@ -11,6 +12,9 @@ Simply create a new entr
    1. Step through the guide from your cell phone.
 
 3. Enter another guide!
+    * Emergencies - medical tips and procedures
+    * Reminders and/or lists
+    * Tutorials and Walkthroughs
 
 ### API Usage:
 
@@ -18,19 +22,23 @@ Simply create a new entr
 * Okta for authentication and guide usage.
 
 ### Dev Notes:
-Add the following environment variables
-<!-- TODO: add vars -->
+Add the following okta environment variables, replacing XXX with your personal okta app values:
+<pre>
+    REACT_APP_OKTA_DOMAIN=XXX
+    REACT_APP_CLIENT_ID=XXX
+</pre>
 
-* Running the client:
+* Start the client:
 <pre>
     cd onboardsms
     yarn && yarn start
 </pre>
 The website should now be running on port 3000.
-* Running the server:
+
+* Start the server:
 <pre>
     # TODO: Install Dependencies
     python server.py
 </pre>
-The web server should now be running on port 3001.
+The web server should now be running on port 5000.
 

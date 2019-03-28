@@ -1,14 +1,13 @@
 from flask import Flask, request, session, jsonify
 from twilio.twiml.messaging_response import MessagingResponse
 from tinydb import TinyDB, Query
-from tinydb.storages import JSONStorage
-from tinydb.middlewares import CachingMiddleware
 import time
 
 # Secret key for session object
 SECRET_KEY = 'd64da3ef-bd48-4b29-b759-6f142c6274f4'
 # https://github.com/msiemens/tinydb
-db = TinyDB('guides.json', storage=CachingMiddleware(JSONStorage))
+db = TinyDB('guides.json')
+guide_table = db.table('guides')
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -24,17 +23,16 @@ Guide Schema:
     ]
 }
 """
-
 ### UTILITIES
 
 def search_by_name(guide_name):
-    return db.search(Guide.name == guide_name)
+    return guide_table.search(Guide.name == guide_name)
 
 def search_by_author(guide_author):
-    return db.search(Guide.author == guide_author)
+    return guide_table.search(Guide.author == guide_author)
 
 def get_all():
-    return db.all()
+    return guide_table.all()
 
 def insert(guide):
     if 'name' not in guide:
@@ -55,11 +53,11 @@ def insert(guide):
         'steps': guide['steps'],
         'createdAt': time.time()
     }
-    db.insert(created_guide)
+    guide_table.insert(created_guide)
     return created_guide
 
 def remove(guide_name):
-    db.remove(Guide.name == guide_name)
+    guide_table.remove(Guide.name == guide_name)
 
 def not_found_message(guide_name):
     return "Could not find a guide with name %s" % guide_name
@@ -76,7 +74,13 @@ def completed_message(guide_name):
 def post_guide():
     body = request.get_json()
     print(body)
-    return jsonify(insert(body))
+    try:
+        return jsonify(insert(body))
+    except Exception as e:
+        res = jsonify(str(e))
+        res.status_code = 400
+        return res
+
 
 @app.route("/guides", methods=['GET'])
 def get_guides():
@@ -89,7 +93,7 @@ def get_guides_by_author(guide_author):
 @app.route("/guides/<guide_name>", methods=['DELETE'])
 def delete_guide(guide_name):
     remove(guide_name)
-    return True
+    return jsonify(True)
 
 #### TWilio Callback
 

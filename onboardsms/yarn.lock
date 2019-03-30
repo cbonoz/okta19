@@ -3035,6 +3035,11 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
 
+date-fns@^1.30.1:
+  version "1.30.1"
+  resolved "https://registry.drift.npme.io/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
+  integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
+
 date-now@^0.1.4:
   version "0.1.4"
   resolved "https://registry.drift.npme.io/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
@@ -4287,6 +4292,11 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.drift.npme.io/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+
+fuse.js@^3.0.0:
+  version "3.4.4"
+  resolved "https://registry.drift.npme.io/fuse.js/-/fuse.js-3.4.4.tgz#f98f55fcb3b595cf6a3e629c5ffaf10982103e95"
+  integrity sha512-pyLQo/1oR5Ywf+a/tY8z4JygnIglmRxVUOiyFAbd11o9keUDpUJSMGRWJngcnkURj30kDHPmhoKY8ChJiz3EpQ==
 
 gauge@~2.7.3:
   version "2.7.4"
@@ -8056,7 +8066,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^3.0.0"
 
-prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.drift.npme.io/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8452,6 +8462,14 @@ react-scripts@^2.1.8:
     workbox-webpack-plugin "3.6.3"
   optionalDependencies:
     fsevents "1.2.4"
+
+react-search-input@^0.11.3:
+  version "0.11.3"
+  resolved "https://registry.drift.npme.io/react-search-input/-/react-search-input-0.11.3.tgz#3dd1f9fc584b6bc40a6ee133ae042b6fbb7ae8dd"
+  integrity sha512-Yo05lNR5YLeIY+mTEk0lMkYHX0qkTlElJmxMTw5JlZPu92EP8YWwIY3QSbEFULvX4wiTfyDdUovTUpp2VockpA==
+  dependencies:
+    fuse.js "^3.0.0"
+    prop-types "^15.5.8"
 
 react-sizeme@^2.2.0:
   version "2.5.2"

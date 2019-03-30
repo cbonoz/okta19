@@ -1,14 +1,11 @@
-let library = {}
-library.checkAuthentication = async function() {
-    const authenticated = await this.props.auth.isAuthenticated();
-    if (authenticated !== this.state.authenticated) {
-      if (authenticated && !this.state.userinfo) {
-        const userinfo = await this.props.auth.getUser();
-        this.setState({ authenticated, userinfo });
-      } else {
-        this.setState({ authenticated });
-      }
+const library = {
+  getEnrichedUser: (currentUser) => {
+    if (currentUser) {
+      currentUser.user_name = currentUser['email'].split('@')[0]
     }
+    return currentUser
   }
+}
+
 
 export default library

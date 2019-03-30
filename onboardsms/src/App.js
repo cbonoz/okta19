@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
 import Home from './components/Home';
-import Header from './components/Header'
 import Protected from './components/Protected';
-import { withAuth } from '@okta/okta-react'
 import Guides from './components/Guides';
 
 const yourOktaDomain = process.env.REACT_APP_OKTA_DOMAIN 
@@ -30,4 +28,4 @@ class App extends Component {
   }
 }
 
-export default withAuth(App)
+export default App

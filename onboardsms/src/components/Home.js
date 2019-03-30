@@ -58,9 +58,10 @@ export default withAuth(class Home extends Component {
   
     render() {
         const { authenticated } = this.state
+        const { auth } = this.props
         return (
             <div className="home-content">
-                <Header authenticated={authenticated} login={() => this.login()} logout={() => this.logout()}/>
+                <Header authenticated={authenticated} auth={auth} login={() => this.login()} logout={() => this.logout()}/>
                 <div className="center home-hero">
                     <img src={full_logo} alt="Onboard SMS logo" className="clear banner-image" />
                     <br />

@@ -728,6 +728,44 @@ td {
   max-width: 800px;
 }
 
+.create-header {
+  margin: 20px;
+}
+
+.create-section {
+  padding: 20px;
+  height: 100vh;
+}
+
+.guide-section {
+  margin: 0 auto;
+  height: 100vh;
+}
+
+.guide-item {
+  cursor: pointer;
+  border: 1px solid black;
+  padding: 20px;
+  margin: 0 auto;
+  text-align: center;
+  background: white;
+  border-radius: 25px;
+  min-width: 300px;
+}
+
+.guide-item:hover {
+  background: #e9e9e9;
+}
+
+.guide-results, .guide-search {
+  max-width: 1000px;
+}
+
+.guide-search {
+  padding-top: 20px;
+  padding-bottom: 5px;
+}
+
 .rotating-text {
   font-size: 32px;
 }

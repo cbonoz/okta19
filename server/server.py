@@ -55,6 +55,10 @@ def insert(guide):
     if not steps or len(steps) < 1:
         raise Exception('guide must have at least one step')
 
+    for i, step in enumerate(steps):
+        if len(step) > 160:
+            raise Exception('step %d too long (max 160 characters)' % i)
+
     if search_by_name(guide['name']):
         raise Exception('guide name already exists')
 
@@ -75,7 +79,7 @@ def not_found_message(guide_name):
     return "Could not find a guide with name %s" % guide_name
 
 def completed_message(guide_name):
-    return "You completed %s! Send another name to start another" % guide_name
+    return "You completed %s! Send another name to start another. Thanks for using Onboard SMS." % guide_name
 
 
 ### ENDPOINTS

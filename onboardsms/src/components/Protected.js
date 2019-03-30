@@ -181,9 +181,12 @@ class Protected extends Component {
             <ListGroupItem variant="info">Create New Guide</ListGroupItem>
             <ListGroupItem>
               <Form schema={schema}
-                onChange={log("changed")}
+                // onChange={log("changed")}
                 onSubmit={this.onSubmit}
-                onError={log("errors")} />
+                // onError={log("errors")} 
+                />
+                <br/>
+                <p><i>Note each step can be a maximum of 160 characters.</i></p>
             </ListGroupItem>
 
           </Col>

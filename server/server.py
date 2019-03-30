@@ -1,4 +1,5 @@
 from flask import Flask, request, session, jsonify
+from flask_cors import CORS
 from twilio.twiml.messaging_response import MessagingResponse
 from tinydb import TinyDB, Query
 import time
@@ -11,12 +12,15 @@ guide_table = db.table('guides')
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+CORS(app)
+
 Guide = Query()
 """
 Guide Schema:
 {
     author: XXX,
     createdAt: XXX,
+    description: XXX,
     name: XXX,
     steps: [
 
@@ -37,12 +41,19 @@ def get_all():
 def insert(guide):
     if 'name' not in guide:
         raise Exception('guide name must be specified')
-    
-    if 'steps' not in guide:
-        raise Exception('guide must have at least one step')
+
+    if 'description' not in guide:
+        raise Exception('guide description must be specified')
 
     if 'author' not in guide:
-        raise Exception('guide must have an author')
+        raise Exception('guide author must be specified')
+
+    if 'steps' not in guide:
+        raise Exception('guide steps must be specified')
+
+    steps = guide['steps']
+    if not steps or len(steps) < 1:
+        raise Exception('guide must have at least one step')
 
     if search_by_name(guide['name']):
         raise Exception('guide name already exists')
@@ -50,7 +61,8 @@ def insert(guide):
     created_guide = {
         'author': guide['author'],
         'name': guide['name'],
-        'steps': guide['steps'],
+        'steps': steps,
+        'description': guide['description'],
         'createdAt': time.time()
     }
     guide_table.insert(created_guide)
@@ -120,7 +132,7 @@ def hello():
     current_step = guides[guide_name]
 
     found_steps = found_guide['steps']
-    
+
     if current_step >= len(found_steps):
         # Clear the guide state.
         del guides[guide_name]

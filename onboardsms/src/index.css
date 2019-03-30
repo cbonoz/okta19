@@ -742,18 +742,38 @@ td {
   height: 100vh;
 }
 
+.text-action {
+  font-size: 20px;
+  font-weight: bold;
+}
+
 .guide-item {
   cursor: pointer;
   border: 1px solid black;
-  padding: 20px;
-  margin: 0 auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  height: 150px;
+  margin: 15px;
   text-align: center;
   background: white;
   border-radius: 25px;
-  min-width: 300px;
 }
 
-.guide-item:hover {
+.my-guide-item {
+  border: 1px solid black;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 15px;
+  text-align: center;
+  background: white;
+  border-radius: 25px;
+}
+
+.my-guide-item-delete {
+  cursor: pointer;
+}
+
+.guide-item:hover, .my-guide-item-delete:hover {
   background: #e9e9e9;
 }
 

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react';
-import Home from './components/Home';
-import Protected from './components/Protected';
-import Guides from './components/Guides';
+import React, { Component } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Security, SecureRoute, ImplicitCallback } from '@okta/okta-react'
+import Home from './components/Home'
+import Protected from './components/Protected'
+import Guides from './components/Guides'
 
 const yourOktaDomain = process.env.REACT_APP_OKTA_DOMAIN 
 const clientId = process.env.REACT_APP_CLIENT_ID
@@ -24,7 +24,7 @@ class App extends Component {
         </Security>
       </Router>
       </div>
-    );
+    )
   }
 }
 

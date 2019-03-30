@@ -100,26 +100,26 @@ class Guides extends Component {
               appeared={scaleDown.appeared}
               enter={scaleDown.enter}
               entered={scaleDown.entered}
+              columnWidth={250}
               leaved={scaleDown.leaved}>
 
               {filteredGuides.map((guide, i) => {
                 const formattedDate = format(parse(guide.createdAt * 1000), 'MM/dd/yyyy')
                 return <div key={i}
                 className='guide-item' onClick={() => this.selectGuide(guide)}>
-                  <h4>Guide: {guide.name}</h4>
-                  <h5>Author: {guide.author}</h5>
-                  <p>Created: {formattedDate}</p>
+                  <h5>Guide: {guide.name}</h5>
+                  <h5>{guide.description}</h5>
+                  {/* <p>Created: {formattedDate}</p> */}
                 </div>
               })}
             </StackGrid>
           </div>
-          <NotificationSystem ref={this.notificationSystem} />
           <GuideModal
             show={modalShow}
             onHide={modalClose}
             currentGuide={currentGuide}
           />
-
+          <NotificationSystem ref={this.notificationSystem} />
         </div>
       </div>
     )

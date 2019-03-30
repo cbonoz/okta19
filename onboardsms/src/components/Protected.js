@@ -4,8 +4,8 @@ import { Row, Col, ListGroup, ListGroupItem, Button } from 'react-bootstrap'
 import Header from './Header'
 import NotificationSystem from 'react-notification-system'
 import { parse, format } from 'date-fns'
-import Form from "react-jsonschema-form";
-
+import Form from "react-jsonschema-form-bs4";
+import helper from '../helper'
 import api from '../api'
 
 const schema = {
@@ -13,11 +13,11 @@ const schema = {
   type: "object",
   required: ["name", "description", "steps"],
   properties: {
-    name: { type: "string", title: "Guide Name", default: "CPR" },
-    description: { type: "string", title: "Description", default: "How to do CPR" },
+    name: { type: "string", title: "Guide Name", default: "ex: CPR" },
+    description: { type: "string", title: "Description", default: "ex: How to do CPR" },
     steps: {
       "type": "array",
-      "title": "Enter Steps",
+      "title": "Enter the steps for your guide",
       "items": {
         "type": "string",
         "default": "Enter your step here!"
@@ -25,8 +25,7 @@ const schema = {
     },
     
   }
-};
-
+}
 
 
 class Protected extends Component {
@@ -44,6 +43,7 @@ class Protected extends Component {
     this.notificationSystem = React.createRef()
     this.checkAuthentication = this.checkAuthentication.bind(this)
     this.createNotification = this.createNotification.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
   }
 
   async checkAuthentication(fetchGuides) {
@@ -59,7 +59,8 @@ class Protected extends Component {
     if (fetchGuides) {
 
       try {
-        const currentUser = await this.props.auth.getUser()
+        let currentUser = await this.props.auth.getUser()
+        currentUser = helper.getEnrichedUser(currentUser)
         console.log('currentUser', JSON.stringify(currentUser))
         this.setState({ currentUser })
         this.getGuidesForUser(currentUser)
@@ -90,7 +91,7 @@ class Protected extends Component {
 
   async getGuidesForUser(currentUser) {
     try {
-      const author = currentUser.name
+      const author = currentUser.user_name
       const response = await api.getGuidesByAuthor(author)
       const guides = response.data
       console.log('myGuides', guides)
@@ -104,8 +105,21 @@ class Protected extends Component {
     this.setState({ currentGuide: {} })
   }
 
-  async submitGuide() {
-    const { currentGuide } = this.state
+  async deleteGuide(guide) {
+    console.log('delete', guide.name)
+    let response
+    try {
+      response = await api.deleteGuideByName(guide.name) 
+      window.location.reload();
+    } catch (e) {
+      console.error('error deleting', e)
+    }
+  }
+
+  async onSubmit({ formData }, e) {
+    console.log("Data submitted: ", formData);
+    const {currentUser} = this.state
+    const currentGuide = {...formData, author: currentUser.user_name} 
     let response
     try {
       response = await api.createGuide(currentGuide)
@@ -115,9 +129,11 @@ class Protected extends Component {
       this.createNotification(errorMessage, 'error')
       return
     }
+
     const createdGuide = response.data
     if (createdGuide) {
       this.createNotification('Created Guide: ' + createdGuide.name, 'success')
+      this.setState({guides: [...this.state.guides, createdGuide]})
       this.clearGuide()
     }
   }
@@ -131,11 +147,6 @@ class Protected extends Component {
     const { auth } = this.props
     const log = (type) => console.log.bind(console, type);
 
-    const onSubmit = ({ formData }, e) => {
-      console.log("Data submitted: ", formData);
-      this.setState({ currentGuide: formData })
-    }
-
     return (
       <div>
         <Header authenticated={authenticated} auth={auth} login={() => this.login()} logout={() => this.logout()} />
@@ -143,7 +154,7 @@ class Protected extends Component {
           {/* Existing Guide Section */}
           <Col xs={12} md={6}>
 
-            <ListGroupItem variant="light">Your Guides</ListGroupItem>
+            <ListGroupItem variant="info">Your Guides</ListGroupItem>
             {loaded && <ListGroupItem>
               {(!guides || guides.length == 0) && <div>
                 <h5><b>Any guides you create will be visible here!</b></h5>
@@ -151,10 +162,12 @@ class Protected extends Component {
               }
               {guides.map((guide, i) => {
                 const formattedDate = format(parse(guide.createdAt * 1000), 'MM/dd/yyyy')
-                return <div className='guide-item' key={i}>
-                  <div onClick={(g) => this.deleteGuide(g)}></div>
-                  <h3>Name: {guide.name}</h3>
+                return <div className='my-guide-item' key={i}>
+                  <h3>{guide.name}</h3>
                   <p>Created: {formattedDate}</p>
+                  <div onClick={() => this.deleteGuide(guide)} className='my-guide-item-delete'>
+                    <i className="fa fa-trash" aria-hidden="true"/>
+                  </div>
                 </div>
               })}
 
@@ -165,11 +178,11 @@ class Protected extends Component {
           {/* Create Guide Section */}
           <Col xs={12} md={6}>
 
-            <ListGroupItem variant="success">Create New Guide</ListGroupItem>
+            <ListGroupItem variant="info">Create New Guide</ListGroupItem>
             <ListGroupItem>
               <Form schema={schema}
                 onChange={log("changed")}
-                onSubmit={onSubmit}
+                onSubmit={this.onSubmit}
                 onError={log("errors")} />
             </ListGroupItem>
 

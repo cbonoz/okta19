@@ -75,13 +75,6 @@ def insert(guide):
 def remove(guide_name):
     guide_table.remove(Guide.name == guide_name)
 
-def not_found_message(guide_name):
-    return "Could not find a guide with name %s" % guide_name
-
-def completed_message(guide_name):
-    return "You completed %s! Send another name to start another. Thanks for using Onboard SMS." % guide_name
-
-
 ### ENDPOINTS
 
 #### Guide routes
@@ -89,7 +82,6 @@ def completed_message(guide_name):
 @app.route("/guides", methods=['POST'])
 def post_guide():
     body = request.get_json()
-    print(body)
     try:
         return jsonify(insert(body))
     except Exception as e:
@@ -112,6 +104,12 @@ def delete_guide(guide_name):
     return jsonify(True)
 
 #### TWilio Callback
+
+def not_found_message(guide_name):
+    return "Could not find a guide with name %s" % guide_name
+
+def completed_message(guide_name):
+    return "You completed %s! Send another name to start another. Thanks for using Onboard SMS." % guide_name
 
 # https://www.twilio.com/docs/sms/tutorials/how-to-create-sms-conversations-python
 @app.route("/sms", methods=['POST'])

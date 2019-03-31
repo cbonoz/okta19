@@ -99,9 +99,9 @@ def add_step_count(x):
     x['stepCount'] = len(x['steps'])
     return x
 
-# @app.route("/", methods=['GET'])
-# def hello():
-#     return jsonify({'success': True})
+@app.route("/", methods=['GET'])
+def hello():
+    return jsonify({'success': True})
 
 @app.route("/guides", methods=['GET'])
 def get_guides():

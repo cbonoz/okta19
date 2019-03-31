@@ -3,8 +3,7 @@
 </p>
 
 # Onboard SMS
----
-SMS Onboarding Guides in under 160 characters.
+Create and share SMS Guides shareable anywhere/anytime - 160 characters per step or less.
 
 ## Inspiration
 Onboard SMS delivers guides and tutorials to you via text where ever you are,

@@ -158,7 +158,7 @@ def twilio_hook():
 
     found_guide = None
 
-    if message_body == 'c' or message_body=='C' or len(message_body) < 2:
+    if message_body == 'c' or message_body == 'C' or len(message_body) < 2:
         # Continue with last guide if present.
         found_guide = last_guide
 

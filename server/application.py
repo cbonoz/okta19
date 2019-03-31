@@ -1,4 +1,5 @@
 from flask import Flask, request, session, jsonify
+import json
 from flask_cors import CORS
 from twilio import twiml
 from twilio.twiml.messaging_response import MessagingResponse
@@ -10,10 +11,10 @@ SECRET_KEY = 'd64da3ef-bd48-4b29-b759-6f142c6274f4'
 # https://github.com/msiemens/tinydb
 db = TinyDB('guides.json')
 guide_table = db.table('guides')
-app = Flask(__name__)
-app.config.from_object(__name__)
+application = Flask(__name__)
+application.config.from_object(__name__)
 
-CORS(app)
+CORS(application)
 
 Guide = Query()
 """
@@ -85,7 +86,29 @@ def remove(guide_name):
 
 #### Guide routes
 
-@app.route("/guides", methods=['POST'])
+def add_step_count(x):
+    x['stepCount'] = len(x['steps'])
+    return x
+
+# print a nice greeting.
+def say_hello(username = "World"):
+    return '<p>Hello %s!</p>\n' % username
+
+# some bits of text for the page.
+header_text = '''
+    <html>\n<head> <title>EB Flask Test</title> </head>\n<body>'''
+instructions = '''
+    <p><em>Hint</em>: This is a RESTful web service! Append a username
+    to the URL (for example: <code>/Thelonious</code>) to say hello to
+    someone specific.</p>\n'''
+home_link = '<p><a href="/">Back</a></p>\n'
+footer_text = '</body>\n</html>'
+
+# add a rule for the index page.
+application.add_url_rule('/', 'index', (lambda: header_text +
+    say_hello() + instructions + footer_text))
+
+@application.route("/guides", methods=['POST'])
 def post_guide():
     body = request.get_json()
     try:
@@ -95,23 +118,15 @@ def post_guide():
         res.status_code = 400
         return res
 
-def add_step_count(x):
-    x['stepCount'] = len(x['steps'])
-    return x
-
-@app.route("/", methods=['GET'])
-def hello():
-    return jsonify({'success': True})
-
-@app.route("/guides", methods=['GET'])
+@application.route("/guides", methods=['GET'])
 def get_guides():
-    return map(add_step_count, jsonify(get_all()))
+    return jsonify(list(map(add_step_count, get_all())))
 
-@app.route("/guides/<guide_author>", methods=['GET'])
+@application.route("/guides/<guide_author>", methods=['GET'])
 def get_guides_by_author(guide_author):
     return jsonify(search_by_author(guide_author))
 
-@app.route("/guides/<guide_name>", methods=['DELETE'])
+@application.route("/guides/<guide_name>", methods=['DELETE'])
 def delete_guide(guide_name):
     remove(guide_name)
     return jsonify(True)
@@ -128,48 +143,57 @@ def cancel_message(guide_name):
     return "You exited %s! Text another." % guide_name
 
 # https://www.twilio.com/docs/sms/tutorials/how-to-create-sms-conversations-python
-@app.route("/sms", methods=['POST'])
-def hello():
+@application.route("/twilio", methods=['POST'])
+def twilio_hook():
     """Respond with the number of text messages sent between two parties."""
     # Increment the counter
-    guides = session.get('guides', {})
+    last_guide = session.get('last_guide', {})
 
     number = request.form['From']
     message_body = request.form['Body']
-    print('body', message_body)
+
     resp = MessagingResponse()
 
     if message_body == 'q':
-       del guides[guide_name]
+       session['last_guide'] = {}
        message = cancel_message(guide_name) 
+       resp.message(message)
+       return str(resp)
 
-    found_guides = search_by_name(message_body)
+    found_guide = None
 
-    if not found_guides:
-        message = not_found_message(message_body)
-        print('sending not found message', message)
-        resp.message(message)
-        return str(resp)
+    if message_body == 'c' or len(message_body) < 2:
+        # continue with last guide if present.
+        found_guide = last_guide
 
-    found_guide = found_guides[0]
+    if not found_guide:
+        found_guides = search_by_name(message_body)
+
+        if not found_guides:
+            message = not_found_message(message_body)
+            print('sending not found message', message)
+            resp.message(message)
+            return str(resp)
+
+        found_guide = found_guides[0]
 
     guide_name = found_guide['name']
     if guide_name not in guides:
         guides[guide_name] = 0
 
-    current_step = guides[guide_name]
+    current_step = found_guide['current_step'] or 0
 
     found_steps = found_guide['steps']
 
     if current_step >= len(found_steps):
         # Clear the guide state.
-        del guides[guide_name]
+        session['last_guide'] = {}
         message = completed_message(guide_name)
     else:
         message = found_steps[current_step]
-        guides[guide_name] += 1
+        found_guide['current_step'] = current_step + 1
 
-    session['guides'] = guides
+    session['last_guide'] = found_guide
 
     # Build our reply
     print('sending message', message)
@@ -177,4 +201,4 @@ def hello():
     return str(resp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    application.run(debug=True)

@@ -27,6 +27,7 @@ class GuideModal extends React.Component {
           {currentGuide.description && <p><b>Description</b>: {currentGuide.description}</p>}
           {formattedDate && <p><b>Created</b>: {formattedDate}</p>}
           <p className='text-action'>Text '{currentGuide.name}' to {MAIN_PHONE}</p>
+          <p><i>For each message, reply with 'c' to continue, or reply 'q'</i></p>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={onHide}>Close</Button>

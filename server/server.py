@@ -120,6 +120,7 @@ def hello():
     # Increment the counter
     guides = session.get('guides', {})
     message_body = request.form['Body']
+    print('body', message_body)
 
     resp = MessagingResponse()
 

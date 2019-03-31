@@ -161,7 +161,8 @@ class Protected extends Component {
               </div>
               }
               {guides.map((guide, i) => {
-                const formattedDate = format(parse(guide.createdAt * 1000), 'MM/dd/yyyy')
+                const parsed = parse(guide.createdAt * 1000)
+                const formattedDate = format(parsed,'MM/DD/YYYY hh:mm a')
                 return <div className='my-guide-item' key={i}>
                   <h3>{guide.name}</h3>
                   <p>Created: {formattedDate}</p>

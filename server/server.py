@@ -94,10 +94,13 @@ def post_guide():
         res.status_code = 400
         return res
 
+def add_step_count(x):
+    x['stepCount'] = len(x['steps'])
+    return x
 
 @app.route("/guides", methods=['GET'])
 def get_guides():
-    return jsonify(get_all())
+    return map(add_step_count, jsonify(get_all()))
 
 @app.route("/guides/<guide_author>", methods=['GET'])
 def get_guides_by_author(guide_author):

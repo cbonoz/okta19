@@ -1,4 +1,5 @@
 from flask import Flask, request, session, jsonify
+import json
 from flask_cors import CORS
 from twilio import twiml
 from twilio.twiml.messaging_response import MessagingResponse
@@ -10,10 +11,10 @@ SECRET_KEY = 'd64da3ef-bd48-4b29-b759-6f142c6274f4'
 # https://github.com/msiemens/tinydb
 db = TinyDB('guides.json')
 guide_table = db.table('guides')
-app = Flask(__name__)
-app.config.from_object(__name__)
+application = Flask(__name__)
+application.config.from_object(__name__)
 
-CORS(app)
+CORS(application)
 
 Guide = Query()
 """
@@ -85,13 +86,13 @@ def remove(guide_name):
 
 #### Guide routes
 
-@app.route("/guides", methods=['POST'])
+@application.route("/guides", methods=['POST'])
 def post_guide():
     body = request.get_json()
     try:
         return jsonify(insert(body))
     except Exception as e:
-        res = jsonify(str(e))
+        res = json.dumps(str(e))
         res.status_code = 400
         return res
 
@@ -99,19 +100,33 @@ def add_step_count(x):
     x['stepCount'] = len(x['steps'])
     return x
 
-# @app.route("/", methods=['GET'])
-# def hello():
-#     return jsonify({'success': True})
+# print a nice greeting.
+def say_hello(username = "World"):
+    return '<p>Hello %s!</p>\n' % username
 
-@app.route("/guides", methods=['GET'])
+# some bits of text for the page.
+header_text = '''
+    <html>\n<head> <title>EB Flask Test</title> </head>\n<body>'''
+instructions = '''
+    <p><em>Hint</em>: This is a RESTful web service! Append a username
+    to the URL (for example: <code>/Thelonious</code>) to say hello to
+    someone specific.</p>\n'''
+home_link = '<p><a href="/">Back</a></p>\n'
+footer_text = '</body>\n</html>'
+
+# add a rule for the index page.
+application.add_url_rule('/', 'index', (lambda: header_text +
+    say_hello() + instructions + footer_text))
+
+@application.route("/guides", methods=['GET'])
 def get_guides():
-    return map(add_step_count, jsonify(get_all()))
+    return jsonify(list(map(add_step_count, get_all()))), 200
 
-@app.route("/guides/<guide_author>", methods=['GET'])
+@application.route("/guides/<guide_author>", methods=['GET'])
 def get_guides_by_author(guide_author):
     return jsonify(search_by_author(guide_author))
 
-@app.route("/guides/<guide_name>", methods=['DELETE'])
+@application.route("/guides/<guide_name>", methods=['DELETE'])
 def delete_guide(guide_name):
     remove(guide_name)
     return jsonify(True)
@@ -128,7 +143,7 @@ def cancel_message(guide_name):
     return "You exited %s! Text another." % guide_name
 
 # https://www.twilio.com/docs/sms/tutorials/how-to-create-sms-conversations-python
-@app.route("/sms", methods=['POST'])
+@application.route("/sms", methods=['POST'])
 def hello():
     """Respond with the number of text messages sent between two parties."""
     # Increment the counter
@@ -177,4 +192,4 @@ def hello():
     return str(resp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    application.run(debug=True)

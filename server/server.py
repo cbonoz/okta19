@@ -122,11 +122,15 @@ def hello():
 
     resp = MessagingResponse()
 
-    found_guide = search_by_name(message_body)
+    found_guides = search_by_name(message_body)
 
-    if not found_guide:
-        resp.message(not_found_message(message_body))
+    if not found_guides:
+        message = not_found_message(message_body)
+        resp.message(message)
+        print('sending message', message)
         return str(resp)
+
+    found_guide = found_guides[0]
 
     guide_name = found_guide['name']
     if guide_name not in guides:
@@ -147,7 +151,8 @@ def hello():
     session['guides'] = guides
 
     # Build our reply
-    resp.message(found_step)
+    print('sending message', message)
+    resp.message(message)
     return str(resp)
 
 if __name__ == "__main__":

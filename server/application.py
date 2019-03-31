@@ -158,11 +158,11 @@ def twilio_hook():
 
     found_guide = None
 
-    if message_body == 'c' or len(message_body) < 2:
+    if message_body == 'c' or message_body='C' or len(message_body) < 2:
         # Continue with last guide if present.
         found_guide = last_guide
 
-    if message_body == 'q' and found_guide:
+    if (message_body == 'q' or message_body == 'Q') and found_guide:
         # We have an active session and the user requested to quit.
         message = cancel_message(found_guide['name']) 
         session['last_guide'] = {}

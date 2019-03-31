@@ -133,14 +133,16 @@ def delete_guide(guide_name):
 
 #### TWilio Callback
 
+CONTINUE_TEXT = 'Text another guide name to start'
+
 def not_found_message(guide_name):
-    return "Could not find a guide with name %s" % guide_name
+    return "Could not find a guide with name %s. %s." % (guide_name, CONTINUE_TEXT)
 
 def completed_message(guide_name):
-    return "You completed %s! Text another guide name to start. Thanks for using Onboard SMS." % guide_name
+    return "You completed %s! %s. Thanks for using OnboardSMS." % (guide_name, CONTINUE_TEXT)
 
 def cancel_message(guide_name):
-    return "You exited %s! Text another." % guide_name
+    return "You exited %s! %s. Thanks for using OnboardSMS." % (guide_name, CONTINUE_TEXT)
 
 # https://www.twilio.com/docs/sms/tutorials/how-to-create-sms-conversations-python
 @application.route("/twilio", methods=['POST'])
@@ -149,22 +151,23 @@ def twilio_hook():
     # Increment the counter
     last_guide = session.get('last_guide', {})
 
-    number = request.form['From']
+    from_number = request.form['From']
     message_body = request.form['Body']
 
     resp = MessagingResponse()
 
-    if message_body == 'q':
-       session['last_guide'] = {}
-       message = cancel_message(guide_name) 
-       resp.message(message)
-       return str(resp)
-
     found_guide = None
 
     if message_body == 'c' or len(message_body) < 2:
-        # continue with last guide if present.
+        # Continue with last guide if present.
         found_guide = last_guide
+
+    if message_body == 'q' and found_guide:
+        # We have an active session and the user requested to quit.
+        message = cancel_message(found_guide['name']) 
+        session['last_guide'] = {}
+        resp.message(message)
+        return str(resp)
 
     if not found_guide:
         found_guides = search_by_name(message_body)
@@ -174,21 +177,19 @@ def twilio_hook():
             print('sending not found message', message)
             resp.message(message)
             return str(resp)
-
         found_guide = found_guides[0]
 
-    guide_name = found_guide['name']
-    if guide_name not in guides:
-        guides[guide_name] = 0
-
-    current_step = found_guide['current_step'] or 0
+    # found_guide must be defined to proceed here.
+    current_step = 0
+    if 'current_step' in found_guide:
+        current_step = found_guide['current_step']
 
     found_steps = found_guide['steps']
 
     if current_step >= len(found_steps):
         # Clear the guide state.
         session['last_guide'] = {}
-        message = completed_message(guide_name)
+        message = completed_message(found_guide['name'])
     else:
         message = found_steps[current_step]
         found_guide['current_step'] = current_step + 1

@@ -25,6 +25,7 @@ class GuideModal extends React.Component {
         <Modal.Body>
           <p><b>Author</b>: {currentGuide.author}</p>
           {currentGuide.description && <p><b>Description</b>: {currentGuide.description}</p>}
+          <p><i>{currentGuide.stepCount} steps</i></p>
           {formattedDate && <p><b>Created</b>: {formattedDate}</p>}
           <p><i>For each message, reply with 'c' to continue, or reply 'q' to cancel.</i></p>
           <p className='text-action'>Text '{currentGuide.name}' to {MAIN_PHONE}</p>

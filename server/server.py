@@ -99,6 +99,10 @@ def add_step_count(x):
     x['stepCount'] = len(x['steps'])
     return x
 
+@app.route("/", methods=['GET'])
+def hello():
+    return jsonify({'success': True})
+
 @app.route("/guides", methods=['GET'])
 def get_guides():
     return map(add_step_count, jsonify(get_all()))
@@ -173,4 +177,4 @@ def hello():
     return str(resp)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

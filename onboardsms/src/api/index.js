@@ -1,5 +1,5 @@
 
-const BASE_URL = 'http://localhost:5000'
+const BASE_URL = process.env.REACT_APP_SERVER_URL 
 const GUIDE_URL = `${BASE_URL}/guides`
 const axios = require('axios')
 

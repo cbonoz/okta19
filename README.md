@@ -53,18 +53,19 @@ Add the following okta environment variables, replacing XXX with your personal o
     REACT_APP_OKTA_DOMAIN=XXX
     REACT_APP_CLIENT_ID=XXX
     REACT_APP_PHONE=XXX
+    REACT_APP_SERVER_URl=XXX
 </pre>
 
-* Start the client:
+* Start the client `onboardsms`:
 <pre>
     cd onboardsms
     yarn && yarn start
 </pre>
 The website should now be running on port 3000.
 
-* Start the server:
+* Start the server `/server`:
 <pre>
-    # TODO: Install Dependencies
+    pip install -r requirements.txt
     python server.py
 </pre>
 The web server should now be running on port 5000.

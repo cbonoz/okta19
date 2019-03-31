@@ -9,10 +9,8 @@ class GuideModal extends React.Component {
     const { currentGuide, onHide, show } = this.props
     let formattedDate
     if (currentGuide) {
-      formattedDate = format(
-        parse(currentGuide.createdAt * 1000),
-        "MM/dd/yyyy"
-      )
+      const parsed = parse(currentGuide.createdAt * 1000)
+      formattedDate = format(parsed,'MM/DD/YYYY hh:mm a')
     }
 
     return (

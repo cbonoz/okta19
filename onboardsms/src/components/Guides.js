@@ -107,8 +107,9 @@ class Guides extends Component {
                 const formattedDate = format(parse(guide.createdAt * 1000), 'MM/dd/yyyy')
                 return <div key={i}
                 className='guide-item' onClick={() => this.selectGuide(guide)}>
-                  <h5>Guide: {guide.name}</h5>
-                  <h5>{guide.description}</h5>
+                  <p>Guide: <br/><b>{guide.name.substr(0, Math.min(guide.name.length, 20))}</b></p>
+                  <hr/>
+                  <p>{guide.description}</p>
                   {/* <p>Created: {formattedDate}</p> */}
                 </div>
               })}

@@ -39,8 +39,13 @@ def get_all():
     return guide_table.all()
 
 def insert(guide):
+
     if 'name' not in guide:
         raise Exception('guide name must be specified')
+
+    name = guide['name']
+    if len(name) < 3:
+        raise Exception('name must be at least 3 characters')
 
     if 'description' not in guide:
         raise Exception('guide description must be specified')
@@ -64,7 +69,7 @@ def insert(guide):
 
     created_guide = {
         'author': guide['author'],
-        'name': guide['name'],
+        'name': name,
         'steps': steps,
         'description': guide['description'],
         'createdAt': time.time()
@@ -152,8 +157,11 @@ def hello():
 
     # Build our reply
     print('sending message', message)
-    resp.message(message)
-    return str(resp)
+    try:
+        resp.message(message)
+        return str(resp)
+    except Exception as e:
+        print('error responding', str(e))
 
 if __name__ == "__main__":
     app.run()

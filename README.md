@@ -1,7 +1,9 @@
 <p align="center">
-  <img src="./img/onboard_trans.png" width=400/>
+  <img src="./img/onboard_trans.png"/>
 </p>
+
 # Onboard SMS
+---
 SMS Onboarding Guides in under 160 characters.
 
 ## Inspiration

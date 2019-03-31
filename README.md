@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="./img/onboard_trans.png" width=400/>
+</p>
 # Onboard SMS
 SMS Onboarding Guides in under 160 characters.
 
@@ -69,4 +72,3 @@ The website should now be running on port 3000.
     python server.py
 </pre>
 The web server should now be running on port 5000.
-

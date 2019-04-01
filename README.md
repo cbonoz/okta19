@@ -78,18 +78,18 @@ The web server should now be running on port 5000.
 
 <p align="center">
 <h5>Home Page</h5>
-  <img src="./img/home_page.png"/>
+  <img width=400 src="./img/home_page.png"/>
 <h5>Guide Information</h5>
-  <img src="./img/guide_info.png"/>
+  <img width=400 src="./img/guide_info.png"/>
 <h5>Create New Guide</h5>
-  <img src="./img/create_new_guide.png"/>
+  <img width=400 src="./img/create_new_guide.png"/>
 <h5>Search Existing Guides</h5>
-  <img src="./img/search_guides.png"/>
-<h5>Example Conversations</h5>
-  <img src="./img/conv1.png"/>
-<h5></h5>
-  <img src="./img/conv2.png"/>
-<h5></h5>
-  <img src="./img/conv3.png"/>
+  <img width=400 src="./img/search_guides.png"/>
+<h5>Example Conversation 1</h5>
+  <img width=400 src="./img/conv1.png"/>
+<h5>Example Conversation 2</h5>
+  <img width=400 src="./img/conv2.png"/>
+<h5>Example Conversation 3</h5>
+  <img width=400 src="./img/conv3.png"/>
 </p>
 

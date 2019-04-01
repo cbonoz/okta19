@@ -76,7 +76,7 @@ The web server should now be running on port 5000.
 
 ### Screenshots
 
-<p align="center">
+<div align="center">
 <h5>Home Page</h5>
   <img width=400 src="./img/home_page.png"/>
 <h5>Guide Information</h5>
@@ -91,5 +91,5 @@ The web server should now be running on port 5000.
   <img width=400 src="./img/conv2.png"/>
 <h5>Example Conversation 3</h5>
   <img width=400 src="./img/conv3.png"/>
-</p>
+</div>
 

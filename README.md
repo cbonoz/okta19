@@ -73,3 +73,23 @@ The website should now be running on port 3000.
     python server.py
 </pre>
 The web server should now be running on port 5000.
+
+### Screenshots
+
+<p align="center">
+<h5>Home Page</h5>
+  <img src="./img/home_page.png"/>
+<h5>Guide Information</h5>
+  <img src="./img/guide_info.png"/>
+<h5>Create New Guide</h5>
+  <img src="./img/create_new_guide.png"/>
+<h5>Search Existing Guides</h5>
+  <img src="./img/search_guides.png"/>
+<h5>Example Conversations</h5>
+  <img src="./img/conv1.png"/>
+<h5></h5>
+  <img src="./img/conv2.png"/>
+<h5></h5>
+  <img src="./img/conv3.png"/>
+</p>
+
